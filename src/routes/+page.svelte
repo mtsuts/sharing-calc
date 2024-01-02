@@ -3,33 +3,60 @@
   import MoneyInput from "$lib/MoneyInput.svelte";
   import Button from "$lib/Button.svelte";
   import { inputVal } from "../store";
-  let inputValue = 0;
+  let inputValue;
   let show = false;
   let inputValues = [];
   let result = 0;
   let isResult = false;
   let noResult = false;
+  let sum = 0;
+  let newArr = [];
 
   $: inputAmount = Array.from({ length: inputValue }, (_, index) => index);
   const handleMoneyInputChange = (index, value) => {
-    inputValues[index] = value;
+    if (value.includes("-")) {
+      value = value.replace("-", "");
+    }
+    inputValues[index] = Number(value);
   };
 
   function calculate() {
-    if (
-      inputValues.includes(undefined) ||
-      inputValues.length !== inputAmount.length
-    ) {
-      isResult = false;
-      noResult = true;
+    if (inputAmount.length === 2) {
+      if (
+        inputValues.includes(undefined) ||
+        inputValues.length !== inputAmount.length ||
+        inputValues.includes("")
+      ) {
+        isResult = false;
+        noResult = true;
+      } else {
+        isResult = true;
+        noResult = false;
+      }
+      const max = Math.max(...inputValues);
+      const min = Math.min(...inputValues);
+      result = (max - min) / inputValues.length;
     } else {
-      isResult = true;
-      noResult = false;
-    }
-    const max = Math.max(...inputValues);
-    const min = Math.min(...inputValues);
+      if (
+        inputValues.includes(undefined) ||
+        inputValues.length !== inputAmount.length ||
+        inputValues.includes("")
+      ) {
+        isResult = false;
+        noResult = true;
+      } else {
+        isResult = true;
+        noResult = false;
+      }
 
-    result = (max - min) / inputValues.length;
+      for (let i = 0; i < inputValues.length; i++) {
+        sum += inputValues[i];
+        result = sum / inputValues.length;
+      }
+      for (let i = 0; i < inputValues.length; i++) {
+        newArr[i] = result - inputValues[i];
+      }
+    }
   }
 
   function reloadPage() {
@@ -40,9 +67,13 @@
   $: if (inputValue > 0) {
     show = true;
   } else {
+    inputValues = [];
+    isResult = false;
     show = false;
   }
   $: result;
+  $: sum;
+  $: newArr;
 </script>
 
 <svelte:head>
@@ -58,18 +89,19 @@
     <p>ღალტერია</p>
   </div>
 </div>
-<div class="mt-20 text-center md:mx-40">
+<div class="mt-10 text-center md:mx-40">
   <div class="flex flex-col items-center">
     <label for="input"> რამდენი ჯგუფი/ადამიანი იყავით?</label>
     <input
+      min="0"
       type="number"
       bind:value={inputValue}
       required
       class="mt-4 w-1/2 md:w-1/6 bg-white border-orange-300 shadow-2xl border-2 rounded-md focus-visible:outline-none"
     />
-    <p class="mt-4">
+    <!-- <p class="mt-4">
       სულ იყავით: {inputValue === null || inputValue === 0 ? 0 : inputValue}
-    </p>
+    </p> -->
     {#if show}
       <p class="mt-4">შეიყვანეთ თანხები</p>
       <div class="grid grid-cols-2 items-center">
@@ -87,17 +119,47 @@
         დაიანგარიშე</Button
       >
       {#if isResult}
-        <p class="mt-6">
-          ვინც ნაკლები გადაიხადა, მან უნდა გადაურიცხოს <span
-            class="text-2xl bg-gray-300 rounded-lg p-2 text-white"
-          >
-            {result}
-          </span> მას, ვინც მეტი გადაიხადა, რათა გათანაბრდეს ხარჯები
-        </p>
-        <Button on:click={reloadPage}>დაიწყე თავიდან</Button>
+        {#if inputAmount.length === 2}
+          <p class="mt-6 mx-4">
+            ვინც ნაკლები გადაიხადა, მან უნდა გადაურიცხოს <span
+              class="text-xl bg-gray-300 rounded-lg p-1 text-white"
+            >
+              {Math.round(result)} ლარი
+            </span> მას, ვინც მეტი გადაიხადა, რათა გათანაბრდეს ხარჯები
+          </p>
+          <Button on:click={reloadPage}>დაიწყე თავიდან</Button>
+        {:else}
+          <p class="mt-6 mx-4">
+            საშუალოდ თითოეულს უნდა გადაგეხადათ <span
+              class="text-xl bg-gray-300 rounded-lg p-1 text-white"
+            >
+              {Math.round(result)} ლარი
+            </span>, შევსებული მონაცემების მიხედვით, ვინც საშუალოზე ნაკლები
+            გადაიხადა მან უნდა გადარიცხოს შესაბამისად (მიყოლებით)
+            <span class="text-xl bg-gray-300 rounded-lg p-1 text-white">
+              {newArr
+                .filter((d) => d >= 0)
+                .map((d) => {
+                  return Math.round(d);
+                })} ლარი
+            </span>
+            ხოლო ვინც საშუალოზე მეტი გადაიხადა, მათ უნდა ჩაერიცხოთ შესაბამისად (მიყოლებით)
+            <span class="text-xl bg-gray-300 rounded-lg p-1 text-white">
+              {newArr
+                .filter((d) => d < 0)
+                .map((d) => {
+                  return Math.abs(d);
+                })} ლარი
+            </span>
+          </p>
+
+          <Button on:click={reloadPage}>დაიწყე თავიდან</Button>
+        {/if}
       {/if}
       {#if noResult}
-        <p class="text-red-400 mt-4">შეიყვანეთ ყველა მონაცემი</p>
+        <p class="text-red-400 mt-4">
+          შეავსეთ ყველა ველი და შეიყვანეთ ყველა მონაცემი
+        </p>
       {/if}
     {/if}
   </div>
