@@ -1,6 +1,6 @@
 import { c as create_ssr_component } from "../../chunks/ssr.js";
 const Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `<div class="app"><main>${slots.default ? slots.default({}) : ``}</main> </div>`;
+  return `<div class="app"><main>${slots.default ? slots.default({}) : ``}</main> <footer class="text-gray-500 fixed bottom-2 md:bottom-10 md:left-40 left-5" data-svelte-h="svelte-ci8sul">© Mariam Tsutskiridze 2023</footer> </div>`;
 });
 export {
   Layout as default
