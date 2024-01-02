@@ -1,12 +1,14 @@
 <script>
   // @ts-nocheck
   import MoneyInput from "$lib/MoneyInput.svelte";
+  import Button from "$lib/Button.svelte";
   import { inputVal } from "../store";
   let inputValue = 0;
   let show = false;
   let inputValues = [];
   let result = 0;
   let isResult = false;
+  let noResult = false;
 
   $: inputAmount = Array.from({ length: inputValue }, (_, index) => index);
   const handleMoneyInputChange = (index, value) => {
@@ -14,12 +16,24 @@
   };
 
   function calculate() {
-    console.log(inputValues);
-    console.log(inputValues.length);
-    isResult = true;
+    if (
+      inputValues.includes(undefined) ||
+      inputValues.length !== inputAmount.length
+    ) {
+      isResult = false;
+      noResult = true;
+    } else {
+      isResult = true;
+      noResult = false;
+    }
     const max = Math.max(...inputValues);
     const min = Math.min(...inputValues);
+
     result = (max - min) / inputValues.length;
+  }
+
+  function reloadPage() {
+    window.location.reload();
   }
 
   $: $inputVal = inputValue;
@@ -57,7 +71,7 @@
       სულ იყავით: {inputValue === null || inputValue === 0 ? 0 : inputValue}
     </p>
     {#if show}
-      <p class="mt-4">შეიყვანე თანხები</p>
+      <p class="mt-4">შეიყვანეთ თანხები</p>
       <div class="grid grid-cols-2 items-center">
         {#each inputAmount as index}
           <MoneyInput
@@ -65,13 +79,12 @@
           />
         {/each}
       </div>
-      <button
+      <Button
         on:click={() => {
           calculate();
         }}
-        class="mt-4 bg-gray-500 text-center p-1 rounded-lg text-white shadow-2xl"
       >
-        დაიანგარიშე</button
+        დაიანგარიშე</Button
       >
       {#if isResult}
         <p class="mt-6">
@@ -81,6 +94,10 @@
             {result}
           </span> მას, ვინც მეტი გადაიხადა, რათა გათანაბრდეს ხარჯები
         </p>
+        <Button on:click={reloadPage}>დაიწყე თავიდან</Button>
+      {/if}
+      {#if noResult}
+        <p class="text-red-400 mt-4">შეიყვანეთ ყველა მონაცემი</p>
       {/if}
     {/if}
   </div>
