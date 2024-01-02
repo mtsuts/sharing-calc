@@ -3,5 +3,9 @@ module.exports = {
   theme: {
     extend: {},
   },
+  purge: [
+    './src/**/*.svelte',
+    // Add other paths as needed
+  ],
   plugins: [],
 }
