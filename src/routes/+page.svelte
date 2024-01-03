@@ -108,9 +108,20 @@
       <p class="mt-4">შეიყვანეთ თანხები</p>
       <div class="grid grid-cols-2 items-center">
         {#each inputAmount as index}
-          <MoneyInput
-            onInputChange={(value) => handleMoneyInputChange(index, value)}
-          />
+          <div>
+            <MoneyInput
+              onInputChange={(value) => handleMoneyInputChange(index, value)}
+            />
+            {#if isResult}
+              {#if inputAmount.length !== 2}
+                <div>
+                  {Math.round(newArr[index]) > 0
+                    ? `გადარიცხოს ${Math.round(newArr[index])}`
+                    : `გადაურიცხონ ${Math.abs(Math.round(newArr[index]))}`}
+                </div>
+              {/if}
+            {/if}
+          </div>
         {/each}
       </div>
       <Button
@@ -135,23 +146,7 @@
             საშუალოდ თითოეულს უნდა გადაგეხადათ <span
               class="text-xl bg-gray-300 rounded-lg p-1 text-white"
             >
-              {Math.round(result)} ლარი
-            </span>, შევსებული მონაცემების მიხედვით, ვინც საშუალოზე ნაკლები
-            გადაიხადა მან უნდა გადარიცხოს შესაბამისად (მიყოლებით)
-            <span class="text-xl bg-gray-300 rounded-lg p-1 text-white">
-              {newArr
-                .filter((d) => d >= 0)
-                .map((d) => {
-                  return Math.round(d);
-                })} ლარი
-            </span>
-            ხოლო ვინც საშუალოზე მეტი გადაიხადა, მათ უნდა ჩაერიცხოთ შესაბამისად (მიყოლებით)
-            <span class="text-xl bg-gray-300 rounded-lg p-1 text-white">
-              {newArr
-                .filter((d) => d < 0)
-                .map((d) => {
-                  return Math.abs(Math.round(d));
-                })} ლარი
+              {Math.round(result)} ლარი.
             </span>
           </p>
 
@@ -166,3 +161,21 @@
     {/if}
   </div>
 </div>
+
+<!-- </span>, შევსებული მონაცემების მიხედვით, ვინც საშუალოზე ნაკლები
+გადაიხადა მან უნდა გადარიცხოს შესაბამისად (მიყოლებით)
+<span class="text-xl bg-gray-300 rounded-lg p-1 text-white">
+  {newArr
+    .filter((d) => d >= 0)
+    .map((d) => {
+      return Math.round(d);
+    })} ლარი
+</span>
+ხოლო ვინც საშუალოზე მეტი გადაიხადა, მათ უნდა ჩაერიცხოთ შესაბამისად (მიყოლებით)
+<span class="text-xl bg-gray-300 rounded-lg p-1 text-white">
+  {newArr
+    .filter((d) => d < 0)
+    .map((d) => {
+      return Math.abs(Math.round(d));
+    })} ლარი
+</span> -->
