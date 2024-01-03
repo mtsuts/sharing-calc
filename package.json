@@ -8,8 +8,8 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "gh-pages": "npm run build && npx gh-pages -d build"
+    "deploy": "npm run build && touch ./build/.nojekyll && gh-pages -d build -t true",
+    "gh-pages": "npx gh-pages -d build"
 
   },
   "devDependencies": {

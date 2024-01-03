@@ -148,7 +148,7 @@
               {newArr
                 .filter((d) => d < 0)
                 .map((d) => {
-                  return Math.abs(d);
+                  return Math.abs(Math.round(d));
                 })} ლარი
             </span>
           </p>
