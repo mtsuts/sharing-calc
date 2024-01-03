@@ -115,9 +115,9 @@
             {#if isResult}
               {#if inputAmount.length !== 2}
                 <div>
-                  {Math.round(newArr[index]) > 0
-                    ? `გადარიცხოს ${Math.round(newArr[index])}`
-                    : `გადაურიცხონ ${Math.abs(Math.round(newArr[index]))}`}
+                  {Math.round(newArr[index]) >= 0
+                    ? `გადარიცხოს ${Math.round(newArr[index])} ლარი`
+                    : `გადაურიცხონ ${Math.abs(Math.round(newArr[index]))} ლარი`}
                 </div>
               {/if}
             {/if}
