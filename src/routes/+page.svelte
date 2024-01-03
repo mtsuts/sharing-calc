@@ -85,7 +85,7 @@
   class="md:p-10 p-6 text-center text-4xl text-white bg-orange-300 mt-4 rounded-xl md:mx-40 shadow-2xl"
 >
   <div class="flex items-center justify-center">
-    <a href="/">
+    <a href="./">
       <img src="./owl-svg-logo.svg" alt="owl-logo" />
     </a>
     <p>ღალტერია</p>
