@@ -47,14 +47,13 @@
       } else {
         isResult = true;
         noResult = false;
-      }
-
-      for (let i = 0; i < inputValues.length; i++) {
-        sum += inputValues[i];
-        result = sum / inputValues.length;
-      }
-      for (let i = 0; i < inputValues.length; i++) {
-        newArr[i] = result - inputValues[i];
+        for (let i = 0; i < inputValues.length; i++) {
+          sum += inputValues[i];
+          result = sum / inputValues.length;
+        }
+        for (let i = 0; i < inputValues.length; i++) {
+          newArr[i] = result - inputValues[i];
+        }
       }
     }
   }
@@ -67,6 +66,9 @@
   $: if (inputValue > 0) {
     show = true;
   } else {
+    result = 0;
+    sum = 0;
+    newArr = [];
     inputValues = [];
     isResult = false;
     show = false;
@@ -161,21 +163,3 @@
     {/if}
   </div>
 </div>
-
-<!-- </span>, შევსებული მონაცემების მიხედვით, ვინც საშუალოზე ნაკლები
-გადაიხადა მან უნდა გადარიცხოს შესაბამისად (მიყოლებით)
-<span class="text-xl bg-gray-300 rounded-lg p-1 text-white">
-  {newArr
-    .filter((d) => d >= 0)
-    .map((d) => {
-      return Math.round(d);
-    })} ლარი
-</span>
-ხოლო ვინც საშუალოზე მეტი გადაიხადა, მათ უნდა ჩაერიცხოთ შესაბამისად (მიყოლებით)
-<span class="text-xl bg-gray-300 rounded-lg p-1 text-white">
-  {newArr
-    .filter((d) => d < 0)
-    .map((d) => {
-      return Math.abs(Math.round(d));
-    })} ლარი
-</span> -->

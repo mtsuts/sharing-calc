@@ -45,7 +45,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       },
       {},
       {}
-    )} ${isResult ? `${inputAmount.length !== 2 ? `<div>${escape(Math.round(newArr[index]) > 0 ? `გადარიცხოს ${Math.round(newArr[index])}` : `გადაურიცხონ ${Math.abs(Math.round(newArr[index]))}`)} </div>` : ``}` : ``} </div>`;
+    )} ${isResult ? `${inputAmount.length !== 2 ? `<div>${escape(Math.round(newArr[index]) >= 0 ? `გადარიცხოს ${Math.round(newArr[index])} ლარი` : `გადაურიცხონ ${Math.abs(Math.round(newArr[index]))} ლარი`)} </div>` : ``}` : ``} </div>`;
   })}</div> ${validate_component(Button, "Button").$$render($$result, {}, {}, {
     default: () => {
       return `დაიანგარიშე`;
