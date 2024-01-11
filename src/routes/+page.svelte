@@ -2,6 +2,7 @@
   // @ts-nocheck
   import MoneyInput from "$lib/MoneyInput.svelte";
   import Button from "$lib/Button.svelte";
+  import Piechart from "$lib/pieChart/Piechart.svelte";
   import { inputVal } from "../store";
   let inputValue;
   let show = false;
@@ -47,6 +48,7 @@
       } else {
         isResult = true;
         noResult = false;
+
         for (let i = 0; i < inputValues.length; i++) {
           sum += inputValues[i];
           result = sum / inputValues.length;
@@ -73,6 +75,7 @@
     isResult = false;
     show = false;
   }
+
   $: result;
   $: sum;
   $: newArr;
@@ -154,6 +157,7 @@
 
           <Button on:click={reloadPage}>დაიწყე თავიდან</Button>
         {/if}
+        <Piechart data={inputValues} />
       {/if}
       {#if noResult}
         <p class="text-red-400 mt-4">

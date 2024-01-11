@@ -31,6 +31,8 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   set_store_value(inputVal, $inputVal = inputValue, $inputVal);
   {
     {
+      result = 0;
+      newArr = [];
       inputValues = [];
       isResult = false;
       show = false;
@@ -58,7 +60,7 @@ const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     default: () => {
       return `დაიწყე თავიდან`;
     }
-  })}`}` : ``} ${``}` : ``}</div></div> `;
+  })}`}` : ``} ${``}` : ``}</div></div>`;
 });
 export {
   Page as default
