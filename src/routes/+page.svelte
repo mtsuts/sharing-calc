@@ -3,6 +3,7 @@
   import MoneyInput from "$lib/MoneyInput.svelte";
   import Button from "$lib/Button.svelte";
   import Piechart from "$lib/pieChart/Piechart.svelte";
+  import Barchart from "$lib/barChart/Barchart.svelte";
   import { inputVal } from "../store";
   let inputValue;
   let show = false;
@@ -11,6 +12,7 @@
   let isResult = false;
   let noResult = false;
   let sum = 0;
+  let average;
   let newArr = [];
 
   $: inputAmount = Array.from({ length: inputValue }, (_, index) => index);
@@ -37,6 +39,11 @@
       const max = Math.max(...inputValues);
       const min = Math.min(...inputValues);
       result = (max - min) / inputValues.length;
+
+      for (let i = 0; i < inputValues.length; i++) {
+        sum += inputValues[i];
+        average = sum / inputValues.length;
+      }
     } else {
       if (
         inputValues.includes(undefined) ||
@@ -52,6 +59,7 @@
         for (let i = 0; i < inputValues.length; i++) {
           sum += inputValues[i];
           result = sum / inputValues.length;
+          average = result;
         }
         for (let i = 0; i < inputValues.length; i++) {
           newArr[i] = result - inputValues[i];
@@ -77,8 +85,15 @@
   }
 
   $: result;
+  $: average;
   $: sum;
   $: newArr;
+  $: barchartData = inputValues.map((d, i) => {
+    return {
+      side: i + 1,
+      value: d,
+    };
+  });
 </script>
 
 <svelte:head>
@@ -139,9 +154,9 @@
       {#if isResult}
         {#if inputAmount.length === 2}
           <p class="mt-6 mx-4">
-            ვინც ნაკლები გადაიხადა, მან უნდა გადაურიცხოს <span
-              class="text-xl bg-gray-300 rounded-lg p-1 text-white"
-            >
+            საშუალოდ უნდა გადაგეხადათ {average} ლარი. ვინც ნაკლები გადაიხადა, მან
+            უნდა გადაურიცხოს
+            <span class="text-xl bg-gray-300 rounded-lg p-1 text-white">
               {Math.round(result)} ლარი
             </span> მას, ვინც მეტი გადაიხადა, რათა გათანაბრდეს ხარჯები
           </p>
@@ -157,7 +172,10 @@
 
           <Button on:click={reloadPage}>დაიწყე თავიდან</Button>
         {/if}
-        <Piechart data={inputValues} />
+        <!-- <Piechart data={inputValues} /> -->
+        <!-- <div class="mb-10">
+          <Barchart data={barchartData} averageData={average} />
+        </div> -->
       {/if}
       {#if noResult}
         <p class="text-red-400 mt-4">

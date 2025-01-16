@@ -17,7 +17,6 @@ export function drawPiechart(container, data) {
 
   const pie = d3.pie().value((d) => d);
   const pieData = pie(data)
-  console.log(pieData)
 
   const colorScale = d3.scalePow().domain([d3.min(pieData.map(d => d.value)), d3.max(pieData.map(d => d.value))]).range(["#ffedd5", "#fdba74"]).exponent(2)
   const arcGenerator = d3.arc()
